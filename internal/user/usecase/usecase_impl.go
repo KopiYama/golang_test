@@ -26,6 +26,6 @@ func (u *userUsecase) Update(ctx context.Context, userID int, name string) error
 	return u.userRepo.Update(ctx, userID, name)
 }
 
-func (u *userUsecase) Delete(ctx context.Context, userID string) error {
+func (u *userUsecase) Delete(ctx context.Context, userID int) error {
 	return u.userRepo.Delete(ctx, userID)
 }

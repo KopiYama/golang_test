@@ -49,6 +49,12 @@ func main() {
 
 	router.POST("/auth/login", authHandler.Login)
 
+	authGroup := router.Group("/auth")
+	authGroup.Use(jwt.AuthMiddleware())
+	{
+		authGroup.POST("/logout", authHandler.Logout)
+	}
+
 	userGroup := router.Group("/users")
 	userGroup.Use(jwt.AuthMiddleware())
 	{

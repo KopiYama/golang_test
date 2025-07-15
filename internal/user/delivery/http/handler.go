@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	userUsecase "golang_test/internal/user/usecase"
 	"net/http"
+	"strconv"
 )
 
 type UserHandler struct {
@@ -73,11 +74,18 @@ func (h *UserHandler) Update(c *gin.Context) {
 }
 
 func (h *UserHandler) Delete(c *gin.Context) {
-	userID := c.Param("user_id")
-	err := h.usecase.Delete(c.Request.Context(), userID)
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": false, "message": "invalid user id"})
+		return
+	}
+
+	err = h.usecase.Delete(c.Request.Context(), id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": false, "message": err.Error()})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{"status": true, "message": "Successfully"})
 }

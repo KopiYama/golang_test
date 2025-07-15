@@ -45,7 +45,7 @@ func (r *userRepo) Update(ctx context.Context, userID int, name string) error {
 	return err
 }
 
-func (r *userRepo) Delete(ctx context.Context, userID string) error {
+func (r *userRepo) Delete(ctx context.Context, userID int) error {
 	_, err := r.db.ExecContext(ctx, `
 		DELETE FROM users WHERE id = $1
 	`, userID)

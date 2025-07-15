@@ -43,3 +43,8 @@ func (u *authUsecase) Login(ctx context.Context, email, password string) (string
 
 	return token, nil
 }
+
+func (u *authUsecase) Logout(ctx context.Context, userID int) error {
+	key := fmt.Sprintf("auth:user:%d", userID)
+	return redis.Client.Del(ctx, key).Err()
+}

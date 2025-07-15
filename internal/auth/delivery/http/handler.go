@@ -48,3 +48,19 @@ type UserHandler struct {
 func NewUserHandler(u usecase.UserUsecase) *UserHandler {
 	return &UserHandler{usecase: u}
 }
+
+func (h *AuthHandler) Logout(c *gin.Context) {
+	userID, exists := c.Get("user_id")
+	if !exists {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"status": false, "message": "unauthorized"})
+		return
+	}
+
+	err := h.usecase.Logout(c.Request.Context(), userID.(int))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": false, "message": "failed to logout"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": true, "message": "logged out successfully"})
+}
